@@ -1,0 +1,16 @@
+---
+// Header links shown next to the GitHub icon. Wraps Starlight's default social icons.
+import Default from '@astrojs/starlight/components/SocialIcons.astro';
+const path = Astro.url.pathname;
+const links = [
+	{ href: '/start/introduction/', label: 'Start', match: '/start/' },
+	{ href: '/tutorials/counter/', label: 'Tutorials', match: '/tutorials/' },
+	{ href: '/guides/state-and-views/', label: 'Guides', match: '/guides/' },
+	{ href: '/codebase/overview/', label: 'Codebase', match: '/codebase/' },
+	{ href: '/reference/glossary/', label: 'Reference', match: '/reference/' },
+];
+---
+<nav class="top-links" aria-label="Sections">
+	{links.map((l) => <a href={l.href} aria-current={path.startsWith(l.match) ? 'true' : undefined}>{l.label}</a>)}
+</nav>
+<Default {...Astro.props}><slot /></Default>

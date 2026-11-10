@@ -6,7 +6,7 @@ pagefind: false
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
-import { Icon } from '@astrojs/starlight/components';
+import LoopDiagram from '../../components/diagrams/LoopDiagram.astro';
 
 <div class="landing">
 
@@ -31,7 +31,7 @@ import { Icon } from '@astrojs/starlight/components';
 </section>
 
 <div class="panel narrow">
-<div class="panel-head"><span class="ico">⌘</span> Your first window</div>
+<div class="panel-head"><span class="ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18M7 6.5h.01M10 6.5h.01"/></svg></span> Your first window</div>
 
 <Tabs>
 <TabItem label="src/main.rs">
@@ -103,12 +103,64 @@ gpui_platform = { git = "https://github.com/zed-industries/zed", rev = "b5cd310b
 <p class="section-sub">Most desktop UI toolkits make you choose between speed and a pleasant way to write code. GPUI aims for both.</p>
 
 <div class="feature-grid">
-  <div class="feature"><div class="ico">⚡</div><h3>Drawn on the GPU</h3><p>There is no browser or web view inside. GPUI draws every frame itself on your graphics card, which is how Zed stays smooth with huge files.</p></div>
-  <div class="feature"><div class="ico">🦀</div><h3>Just Rust</h3><p>Your state, your layout and your event handlers live in one language. No HTML, no JavaScript, no bridge between them.</p></div>
-  <div class="feature"><div class="ico">🎨</div><h3>Styling you already know</h3><p>Style with chained methods like <code>.flex()</code>, <code>.gap_3()</code> and <code>.bg(...)</code>. If you have used Tailwind, it will feel familiar.</p></div>
-  <div class="feature"><div class="ico">🧩</div><h3>Three levels of control</h3><p>Use simple views for most screens, and drop down to low-level elements when you need a custom editor or a huge list.</p></div>
-  <div class="feature"><div class="ico">⌨️</div><h3>Keyboard first</h3><p>Actions and key bindings are built in, so shortcuts, focus and command palettes are natural to build.</p></div>
-  <div class="feature"><div class="ico">🖥️</div><h3>macOS, Windows, Linux</h3><p>One codebase. Each platform has its own native window backend underneath.</p></div>
+  <div class="feature"><div class="ico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/></svg></div><h3>Drawn on the GPU</h3><p>There is no browser or web view inside. GPUI draws every frame itself on your graphics card, which is how Zed stays smooth with huge files.</p></div>
+  <div class="feature"><div class="ico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4c-2 0-3 1-3 3v2c0 1-.5 2-2 3 1.5 1 2 2 2 3v2c0 2 1 3 3 3M16 4c2 0 3 1 3 3v2c0 1 .5 2 2 3-1.5 1-2 2-2 3v2c0 2-1 3-3 3"/></svg></div><h3>Just Rust</h3><p>Your state, your layout and your event handlers live in one language. No HTML, no JavaScript, no bridge between them.</p></div>
+  <div class="feature"><div class="ico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></div><h3>Styling you already know</h3><p>Style with chained methods like <code>.flex()</code>, <code>.gap_3()</code> and <code>.bg(...)</code>. If you have used Tailwind, it will feel familiar.</p></div>
+  <div class="feature"><div class="ico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 3 8l9 5 9-5-9-5Z"/><path d="m3 13 9 5 9-5"/></svg></div><h3>Three levels of control</h3><p>Use simple views for most screens, and drop down to low-level elements when you need a custom editor or a huge list.</p></div>
+  <div class="feature"><div class="ico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h.01M11 10h.01M15 10h.01M7 14h10"/></svg></div><h3>Keyboard first</h3><p>Actions and key bindings are built in, so shortcuts, focus and command palettes are natural to build.</p></div>
+  <div class="feature"><div class="ico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M9 20h6M12 16v4"/></svg></div><h3>macOS, Windows, Linux</h3><p>One codebase. Each platform has its own native window backend underneath.</p></div>
+</div>
+
+<h2 class="section-title">How it works</h2>
+<p class="section-sub">Every GPUI app runs one loop. You change your data, and GPUI redraws the window from it.</p>
+
+<LoopDiagram />
+
+<h2 class="section-title">What you will build</h2>
+<p class="section-sub">Each tutorial ends with a small app you can run. They get a little harder as you go.</p>
+
+<div class="build-grid">
+
+<a class="build" href="/tutorials/counter/">
+<svg class="mock" viewBox="0 0 320 200" role="img" aria-label="A small dark window with the number 0 and three buttons: Decrement, Increment, Reset">
+	<rect class="win" x="1" y="1" width="318" height="198" rx="12"/>
+	<circle class="dot" cx="18" cy="16" r="4"/><circle class="dot" cx="32" cy="16" r="4"/><circle class="dot" cx="46" cy="16" r="4"/>
+	<text class="num" x="160" y="106" text-anchor="middle">0</text>
+	<rect class="btn-m" x="30" y="136" width="76" height="32" rx="8"/><text class="btn-t" x="68" y="157" text-anchor="middle">Decrement</text>
+	<rect class="btn-m hot" x="116" y="136" width="86" height="32" rx="8"/><text class="btn-t" x="159" y="157" text-anchor="middle">Increment</text>
+	<rect class="btn-m" x="212" y="136" width="78" height="32" rx="8"/><text class="btn-t" x="251" y="157" text-anchor="middle">Reset</text>
+</svg>
+<h3>Counter</h3>
+<p>State, a click handler and <code>cx.notify()</code>.</p>
+</a>
+
+<a class="build" href="/tutorials/todo-list/">
+<svg class="mock" viewBox="0 0 320 200" role="img" aria-label="A dark window with a Todo heading, a count, and three task rows with checkboxes and Remove buttons">
+	<rect class="win" x="1" y="1" width="318" height="198" rx="12"/>
+	<circle class="dot" cx="18" cy="16" r="4"/><circle class="dot" cx="32" cy="16" r="4"/><circle class="dot" cx="46" cy="16" r="4"/>
+	<text class="h" x="24" y="52">Todo</text><text class="muted" x="296" y="52" text-anchor="end">1 of 3 done</text>
+	<g><rect class="row" x="20" y="68" width="280" height="30" rx="7"/><rect class="chk on" x="30" y="76" width="14" height="14" rx="4"/><text class="strike" x="54" y="87">Install GPUI</text><rect class="rm" x="250" y="74" width="40" height="18" rx="5"/></g>
+	<g><rect class="row" x="20" y="104" width="280" height="30" rx="7"/><rect class="chk" x="30" y="112" width="14" height="14" rx="4"/><text class="t" x="54" y="123">Write a view</text><rect class="rm" x="250" y="110" width="40" height="18" rx="5"/></g>
+	<g><rect class="row" x="20" y="140" width="280" height="30" rx="7"/><rect class="chk" x="30" y="148" width="14" height="14" rx="4"/><text class="t" x="54" y="159">Handle a click</text><rect class="rm" x="250" y="146" width="40" height="18" rx="5"/></g>
+</svg>
+<h3>Todo list</h3>
+<p>Lists, ids and removing items.</p>
+</a>
+
+<a class="build" href="/tutorials/text-input/">
+<svg class="mock" viewBox="0 0 320 200" role="img" aria-label="A gray window with a white text box containing hello with a blue selection and cursor, and a line below saying what was typed">
+	<rect class="win gray" x="1" y="1" width="318" height="198" rx="12"/>
+	<circle class="dot" cx="18" cy="16" r="4"/><circle class="dot" cx="32" cy="16" r="4"/><circle class="dot" cx="46" cy="16" r="4"/>
+	<rect class="field" x="24" y="48" width="272" height="40" rx="8"/>
+	<rect class="sel" x="40" y="58" width="56" height="20" rx="3"/>
+	<text class="ft" x="42" y="74">hello</text>
+	<rect class="cur" x="97" y="58" width="2" height="20"/>
+	<text class="muted" x="24" y="122">You typed 5 bytes: "hello"</text>
+</svg>
+<h3>Text input</h3>
+<p>Focus, key bindings and IME. The advanced one.</p>
+</a>
+
 </div>
 
 <h2 class="section-title">Coming from React?</h2>

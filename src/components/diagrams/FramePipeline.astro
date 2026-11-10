@@ -1,0 +1,55 @@
+---
+import Figure from './Figure.astro';
+import Defs from './Defs.astro';
+---
+<Figure caption="<strong>One click, from the OS to the screen.</strong> Part A is a single call into the app. Part B happens on a later turn of the event loop, when the platform asks for a frame. Paths are relative to <code>crates/gpui/src</code> unless they name a backend.">
+<svg class="dg" viewBox="0 0 720 986" role="img" aria-label="The twelve steps of a frame. Part A: the OS reports a click, the window finds what was hit, your click closure runs, cx.notify marks the window dirty, and effects flush. Part B: the platform frame source fires, Window::draw runs three phases (request_layout, prepaint, paint), the frame finishes, and the Scene is presented to the GPU.">
+	<Defs />
+	<text class="cap" x="10" y="10">Part A</text><text class="big" x="10" y="34">The click becomes “this window is dirty”</text><text class="sub" x="10" y="54">one call into App, on the main thread</text>
+	<text class="cap" x="10" y="456">Part B</text><text class="big" x="10" y="480">The dirty window becomes pixels</text><text class="sub" x="10" y="500">a later turn of the platform’s event loop</text>
+	<rect class="zone" x="18" y="634" width="694" height="188" rx="14" />
+	<text class="zlabel" x="64" y="638">Window::draw_roots · three phases</text>
+	<path class="spine" d="M40 96 V344" />
+	<path class="spine" d="M40 542 V914" />
+	<path class="ed dash" d="M40 364 V442" />
+	<text class="lbl" x="56" y="406">later, on the next turn of the event loop</text>
+	<circle class="bd platform" cx="40" cy="96" r="14" /><text class="bn" x="40" y="96">1</text>
+	<text class="ttl" x="72" y="92">The OS reports the mouse-up</text><text class="sub" x="72" y="111">converted to a PlatformInput</text>
+	<text class="sub mono file" x="708" y="101" text-anchor="end">gpui_macos/src/events.rs</text>
+	<circle class="bd neutral" cx="40" cy="158" r="14" /><text class="bn" x="40" y="158">2</text>
+	<text class="ttl" x="72" y="154">The window finds what was hit</text><text class="sub" x="72" y="173">hit test, then capture and bubble listeners</text>
+	<text class="sub mono file" x="708" y="163" text-anchor="end">window.rs · dispatch_mouse_event</text>
+	<circle class="bd view" cx="40" cy="220" r="14" /><text class="bn" x="40" y="220">3</text>
+	<text class="ttl" x="72" y="216">Your click closure runs</text><text class="sub" x="72" y="235">count += 1 on the leased Counter</text>
+	<text class="sub mono file" x="708" y="225" text-anchor="end">elements/div.rs · Context::listener</text>
+	<circle class="bd view" cx="40" cy="282" r="14" /><text class="bn" x="40" y="282">4</text>
+	<text class="ttl" x="72" y="278">cx.notify() marks the window dirty</text><text class="sub" x="72" y="297">dirty = true, an Effect::Notify is queued</text>
+	<text class="sub mono file" x="708" y="287" text-anchor="end">app/context.rs → window.rs</text>
+	<circle class="bd neutral" cx="40" cy="344" r="14" /><text class="bn" x="40" y="344">5</text>
+	<text class="ttl" x="72" y="340">The update ends and effects flush</text><text class="sub" x="72" y="359">observers run, then a frame is requested</text>
+	<text class="sub mono file" x="708" y="349" text-anchor="end">app.rs · flush_effects</text>
+	<circle class="bd platform" cx="40" cy="542" r="14" /><text class="bn" x="40" y="542">6</text>
+	<text class="ttl" x="72" y="538">The platform frame source fires</text><text class="sub" x="72" y="557">vsync, display link or requestAnimationFrame</text>
+	<text class="sub mono file" x="708" y="547" text-anchor="end">window.rs · on_request_frame</text>
+	<circle class="bd neutral" cx="40" cy="604" r="14" /><text class="bn" x="40" y="604">7</text>
+	<text class="ttl" x="72" y="600">Window::draw sets the stage</text><text class="sub" x="72" y="619">clears per-frame state, enters the arena</text>
+	<text class="sub mono file" x="708" y="609" text-anchor="end">window.rs</text>
+	<circle class="bd view" cx="40" cy="666" r="14" /><text class="bn" x="40" y="666">8</text>
+	<text class="ttl" x="72" y="662">Phase 1: request_layout</text><text class="sub" x="72" y="681">your render runs here, Taffy sizes boxes</text>
+	<text class="sub mono file" x="708" y="671" text-anchor="end">element.rs · view.rs · taffy.rs</text>
+	<circle class="bd neutral" cx="40" cy="728" r="14" /><text class="bn" x="40" y="728">9</text>
+	<text class="ttl" x="72" y="724">Phase 2: prepaint</text><text class="sub" x="72" y="743">positions are known, hitboxes registered</text>
+	<text class="sub mono file" x="708" y="733" text-anchor="end">element.rs</text>
+	<circle class="bd neutral" cx="40" cy="790" r="14" /><text class="bn" x="40" y="790">10</text>
+	<text class="ttl" x="72" y="786">Phase 3: paint</text><text class="sub" x="72" y="805">shapes and listeners go into the Scene</text>
+	<text class="sub mono file" x="708" y="795" text-anchor="end">element.rs</text>
+	<circle class="bd neutral" cx="40" cy="852" r="14" /><text class="bn" x="40" y="852">11</text>
+	<text class="ttl" x="72" y="848">The frame is finished</text><text class="sub" x="72" y="867">swap frames, record which entities were read</text>
+	<text class="sub mono file" x="708" y="857" text-anchor="end">window.rs · Frame::finish</text>
+	<circle class="bd platform" cx="40" cy="914" r="14" /><text class="bn" x="40" y="914">12</text>
+	<text class="ttl" x="72" y="910">The Scene is presented</text><text class="sub" x="72" y="929">the backend renderer draws it on the GPU</text>
+	<text class="sub mono file" x="708" y="919" text-anchor="end">PlatformWindow::draw</text>
+	<text class="lbl acc" x="268" y="662">← Counter::render runs here</text>
+	<g transform="translate(10 964)"><circle class="bd platform" cx="8" cy="0" r="7" /><text class="sub" x="22" y="4">OS or GPU</text><circle class="bd neutral" cx="130" cy="0" r="7" /><text class="sub" x="144" y="4">GPUI</text><circle class="bd view" cx="210" cy="0" r="7" /><text class="sub" x="224" y="4">your code</text></g>
+</svg>
+</Figure>

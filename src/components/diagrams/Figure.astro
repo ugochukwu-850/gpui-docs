@@ -1,0 +1,9 @@
+---
+// One figure, one claim. The caption states what the picture shows.
+interface Props { caption: string }
+const { caption } = Astro.props;
+---
+<figure class="dg-figure not-content">
+	<div class="dg-frame"><slot /></div>
+	<figcaption set:html={caption} />
+</figure>

@@ -6,6 +6,8 @@ sidebar:
   label: How GPUI owns your data
 ---
 
+import OwnershipDiagram from '../../../components/diagrams/OwnershipDiagram.astro';
+
 :::note[Advanced]
 This page is for readers who have finished the beginner path and want to know *why* GPUI state works the way it does. Read [Thinking in GPUI](/start/thinking-in-gpui/) and [State and views](/guides/state-and-views/) first.
 :::
@@ -49,14 +51,7 @@ let n: usize = counter.read(cx).count;
 
 A helpful picture is a coat check. The `App` is the cloakroom, your state is the coat, and the `Entity<T>` is the ticket. Anyone can carry a ticket, but you need the attendant to hand you the coat.
 
-```text
-  Your code                 App (the cloakroom)
-  ---------                 -------------------
-  Entity<Counter>  ticket   entity map:
-  (id 7, refcount) -------> id 7 -> Counter { count: 0 }
-  Entity<Counter>  ticket   id 8 -> Editor { .. }
-  (a clone: same id)        id 9 -> Workspace { .. }
-```
+<OwnershipDiagram />
 
 Inside, the `App` keeps a map from `EntityId` to a boxed value (`EntityId -> Box<dyn Any>`). The `update` call *leases* the value out of the map. In plain words, it removes the value for as long as your closure runs, hands you `&mut T`, and puts it back afterwards. That one mechanism explains most of the rules below.
 

@@ -6,6 +6,8 @@ sidebar:
   label: How a frame is drawn
 ---
 
+import FramePipeline from '../../../components/diagrams/FramePipeline.astro';
+
 This page follows one click all the way through GPUI: from the mouse button, through your code, to the new pixels on screen. If you read only one page of the Codebase tour, read this one. Nearly everything else in GPUI hangs off this path.
 
 Everything here was read from commit `b5cd310b`. Line numbers are left out on purpose, because they drift. Function and type names are the reliable handle: search for them with `rg`.
@@ -82,52 +84,7 @@ When the mouse button goes down on an element with a click listener, `Div` remem
 
 The numbers match the headings below. Each line names the function and the file where it happens.
 
-```text
-PART A: the click becomes "this window is dirty"
-(runs on the main thread, inside ONE call into App)
-
- [1] OS reports mouse-up         backend: e.g. gpui_macos/src/events.rs
-      |                          platform_input_from_native -> PlatformInput
-      v
- [2] Window::dispatch_event      window.rs
-      |  -> dispatch_mouse_event   hit test, then capture + bubble listeners
-      v
- [3] your click closure          elements/div.rs  paint_mouse_listeners
-      |                          app/context.rs   Context::listener
-      |  count += 1              (Counter is leased from the EntityMap)
-      v
- [4] cx.notify()                 app/context.rs   Context::notify
-      |  -> App::notify          app.rs
-      |  -> WindowInvalidator::invalidate_view     window.rs
-      |        dirty = true, dirty_views += Counter, Effect::Notify queued,
-      |        platform "waker" called
-      v
- [5] outermost update ends       app.rs   finish_update -> flush_effects
-         observers run; queue empty -> PlatformWindow::schedule_frame()
-
-PART B: the dirty window becomes pixels
-(a later turn of the platform's event loop)
-
- [6] platform frame source fires    vsync / wl_surface.frame / display link /
-      |                             requestAnimationFrame
-      |  -> on_request_frame callback          window.rs  (set up in Window::new)
-      v
- [7] Window::draw                  window.rs   set the stage
-      |   ElementArenaScope::enter, invalidate_entities, clear_accessed
-      v
-     Window::draw_roots            window.rs
- [8]    phase 1  request_layout    element.rs, view.rs   Counter::render RUNS HERE
-      |         + compute_layout   taffy.rs              (sizes and positions)
- [9]    phase 2  prepaint          element.rs            hitboxes, dispatch nodes
- [10]   phase 3  paint             element.rs            Scene primitives, listeners
-      v
- [11] finish the frame             window.rs   Frame::finish, swap frames,
-      |                            record_entities_accessed
-      v
- [12] Window::present              window.rs
-         -> PlatformWindow::draw(&Scene)   backend renderer -> GPU -> screen
-         -> arena cleared
-```
+<FramePipeline />
 
 Part A is quick and happens right inside the input event. Part B happens when the operating system is ready for a new picture, usually once per screen refresh.
 

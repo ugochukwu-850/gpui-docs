@@ -1,0 +1,68 @@
+---
+import Figure from './Figure.astro';
+import Defs from './Defs.astro';
+---
+<Figure caption="<strong>What lives how long.</strong> Your state and your views are kept between frames. The elements a view builds are thrown away after each frame and rebuilt on the next one.">
+<svg class="dg" viewBox="0 0 700 330" role="img" aria-label="Three lanes over four frames. State: one long-lived entity that lasts until its last handle is dropped. Views: one long-lived view whose render function runs once per frame. Elements: a new element tree is built by each render and dropped after drawing.">
+	<Defs />
+
+	<!-- frame guides -->
+	<g>
+		<path class="zone" d="M290 54 V292" /><path class="zone" d="M405 54 V292" />
+		<path class="zone" d="M520 54 V292" /><path class="zone" d="M635 54 V292" />
+	</g>
+	<text class="cap" x="290" y="36" text-anchor="middle">frame 1</text>
+	<text class="cap" x="405" y="36" text-anchor="middle">frame 2</text>
+	<text class="cap" x="520" y="36" text-anchor="middle">frame 3</text>
+	<text class="cap" x="635" y="36" text-anchor="middle">frame 4</text>
+	<text class="cap" x="10" y="36">time →</text>
+
+	<!-- lane labels -->
+	<text class="ttl" x="10" y="98">State</text>
+	<text class="sub mono" x="10" y="118">Entity&lt;Counter&gt;</text>
+	<text class="ttl" x="10" y="190">Views</text>
+	<text class="sub" x="10" y="210">an entity that</text>
+	<text class="sub mono" x="10" y="228">impl Render</text>
+	<text class="ttl" x="10" y="282">Elements</text>
+	<text class="sub mono" x="10" y="302">div() text()</text>
+
+	<!-- state: one long bar -->
+	<rect class="nd state" x="215" y="78" width="475" height="44" rx="10" />
+	<text class="sub mono" x="232" y="105" style="fill:var(--sl-color-white)">Counter &#123; count &#125;</text>
+	<text class="sub" x="676" y="105" text-anchor="end">kept until the last handle is dropped</text>
+
+	<!-- views: a long bar with a render pulse per frame -->
+	<rect class="nd view" x="215" y="170" width="475" height="44" rx="10" />
+	<g>
+		<rect class="nd view" x="258" y="178" width="64" height="28" rx="7" style="fill:var(--c-view);fill-opacity:.35" />
+		<rect class="nd view" x="373" y="178" width="64" height="28" rx="7" style="fill:var(--c-view);fill-opacity:.35" />
+		<rect class="nd view" x="488" y="178" width="64" height="28" rx="7" style="fill:var(--c-view);fill-opacity:.35" />
+		<rect class="nd view" x="603" y="178" width="64" height="28" rx="7" style="fill:var(--c-view);fill-opacity:.35" />
+		<text class="sub mono" x="290" y="196" text-anchor="middle" style="fill:var(--sl-color-white)">render()</text>
+		<text class="sub mono" x="405" y="196" text-anchor="middle" style="fill:var(--sl-color-white)">render()</text>
+		<text class="sub mono" x="520" y="196" text-anchor="middle" style="fill:var(--sl-color-white)">render()</text>
+		<text class="sub mono" x="635" y="196" text-anchor="middle" style="fill:var(--sl-color-white)">render()</text>
+	</g>
+
+	<!-- elements: separate short-lived blocks -->
+	<rect class="nd" x="215" y="262" width="475" height="44" rx="10" style="stroke-dasharray:2 5;fill:none" />
+	<g>
+		<rect class="nd element" x="258" y="270" width="64" height="28" rx="7" />
+		<rect class="nd element" x="373" y="270" width="64" height="28" rx="7" />
+		<rect class="nd element" x="488" y="270" width="64" height="28" rx="7" />
+		<rect class="nd element" x="603" y="270" width="64" height="28" rx="7" />
+		<text class="sub mono" x="290" y="288" text-anchor="middle" style="fill:var(--sl-color-white)">tree</text>
+		<text class="sub mono" x="405" y="288" text-anchor="middle" style="fill:var(--sl-color-white)">tree</text>
+		<text class="sub mono" x="520" y="288" text-anchor="middle" style="fill:var(--sl-color-white)">tree</text>
+		<text class="sub mono" x="635" y="288" text-anchor="middle" style="fill:var(--sl-color-white)">tree</text>
+	</g>
+
+	<!-- render builds a tree, each frame -->
+	<path class="ed acc" d="M290 208 V258" />
+	<path class="ed acc" d="M405 208 V258" />
+	<path class="ed acc" d="M520 208 V258" />
+	<path class="ed acc" d="M635 208 V258" />
+	<text class="lbl acc" x="300" y="240">builds</text>
+	<text class="lbl" x="226" y="262" style="display:none">dropped</text>
+</svg>
+</Figure>

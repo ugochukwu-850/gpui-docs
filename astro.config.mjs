@@ -10,7 +10,7 @@ export default defineConfig({
 			description: 'Learn GPUI, the GPU-accelerated Rust UI framework behind the Zed editor. Unofficial, beginner-friendly documentation.',
 			logo: { src: './src/assets/logo.svg' },
 			favicon: '/favicon.svg',
-			customCss: ['./src/styles/custom.css'],
+			customCss: ['./src/styles/custom.css', './src/styles/diagrams.css'],
 			head: [
 				{ tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.googleapis.com' } },
 				{ tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' } },
@@ -21,9 +21,10 @@ export default defineConfig({
 			],
 			editLink: { baseUrl: 'https://github.com/ugochukwu-850/gpui-docs/edit/main/' },
 			credits: false,
+			components: { SocialIcons: './src/components/NavLinks.astro' },
 			expressiveCode: {
 				themes: ['github-dark-dimmed', 'github-light'],
-				styleOverrides: { borderRadius: '0.6rem', codeFontFamily: "'JetBrains Mono', ui-monospace, monospace", codeFontSize: '0.86rem' },
+				styleOverrides: { borderRadius: '0.8rem', borderColor: 'var(--gpui-border)', codeFontFamily: "'JetBrains Mono', ui-monospace, monospace", codeFontSize: '0.86rem', codeLineHeight: '1.65' },
 			},
 			sidebar: [
 				{ label: 'Start Here', items: [{ autogenerate: { directory: 'start' } }] },

@@ -1,0 +1,57 @@
+---
+import Figure from './Figure.astro';
+import Defs from './Defs.astro';
+---
+<Figure caption="<strong>One framework crate, many backends.</strong> <code>gpui</code> contains no operating-system code. It only defines traits. <code>gpui_platform</code> picks one backend at compile time, and each backend draws with its own renderer.">
+<svg class="dg" viewBox="0 0 700 468" role="img" aria-label="Layers of the GPUI crates. Your app sits on gpui and the ui crate. Below the trait boundary, gpui_platform selects one backend: gpui_linux, gpui_web, gpui_macos, gpui_ios or gpui_windows. Linux and web draw with gpui_wgpu, macOS and iOS with Metal, and Windows with Direct3D 11.">
+	<Defs />
+
+	<rect class="nd" x="10" y="8" width="680" height="40" rx="10" />
+	<text class="ttl" x="30" y="33">Your app, or Zed itself</text>
+
+	<rect class="nd view" x="10" y="68" width="440" height="86" rx="12" />
+	<text class="ttl" x="30" y="98">gpui</text>
+	<text class="sub" x="30" y="119">the framework: state, views, elements,</text>
+	<text class="sub" x="30" y="137">layout, input, text, drawing, async</text>
+	<rect class="nd dash" x="466" y="68" width="224" height="86" rx="12" />
+	<text class="ttl" x="486" y="98">ui</text>
+	<text class="sub" x="486" y="119">Zed's component library</text>
+	<text class="sub" x="486" y="137">Button, Label … built on gpui</text>
+
+	<g class="chips">
+		<rect class="nd dash" x="10" y="166" width="104" height="26" rx="7" /><text class="sub mono" x="62" y="183" text-anchor="middle">gpui_macros</text>
+		<rect class="nd dash" x="122" y="166" width="90" height="26" rx="7" /><text class="sub mono" x="167" y="183" text-anchor="middle">gpui_util</text>
+		<rect class="nd dash" x="220" y="166" width="156" height="26" rx="7" /><text class="sub mono" x="298" y="183" text-anchor="middle">gpui_shared_string</text>
+		<rect class="nd dash" x="384" y="166" width="140" height="26" rx="7" /><text class="sub mono" x="454" y="183" text-anchor="middle">gpui_tokio · opt</text>
+	</g>
+
+	<path class="ed acc plain" d="M10 218 H690" style="stroke-dasharray:6 5;marker-end:none" />
+	<text class="lbl acc" x="350" y="214" text-anchor="middle">the boundary: traits only (Platform, PlatformWindow, …)</text>
+
+	<rect class="nd platform" x="10" y="236" width="680" height="46" rx="12" />
+	<text class="ttl" x="30" y="264">gpui_platform</text>
+	<text class="sub" x="170" y="264">chooses ONE backend at compile time</text>
+
+	<g>
+		<rect class="nd platform" x="10" y="306" width="128" height="52" rx="10" /><text class="ttl" x="74" y="337" text-anchor="middle">gpui_linux</text>
+		<rect class="nd platform" x="153" y="306" width="128" height="52" rx="10" /><text class="ttl" x="217" y="337" text-anchor="middle">gpui_web</text>
+		<rect class="nd platform" x="296" y="306" width="128" height="52" rx="10" /><text class="ttl" x="360" y="337" text-anchor="middle">gpui_macos</text>
+		<rect class="nd platform" x="439" y="306" width="128" height="52" rx="10" /><text class="ttl" x="503" y="337" text-anchor="middle">gpui_ios</text>
+		<rect class="nd platform" x="582" y="306" width="108" height="52" rx="10" /><text class="ttl" x="636" y="337" text-anchor="middle" style="font-size:12.5px">gpui_windows</text>
+	</g>
+
+	<path class="ed" d="M74 358 V392" /><path class="ed" d="M217 358 V392" />
+	<path class="ed" d="M360 358 V392" /><path class="ed" d="M503 358 V392" />
+	<path class="ed" d="M636 358 V392" />
+
+	<rect class="nd element" x="10" y="394" width="271" height="52" rx="10" />
+	<text class="ttl" x="26" y="418">gpui_wgpu</text>
+	<text class="sub" x="26" y="436">wgpu + WGSL · Linux and web</text>
+	<rect class="nd element" x="296" y="394" width="271" height="52" rx="10" />
+	<text class="ttl" x="312" y="418">Metal</text>
+	<text class="sub" x="312" y="436">via gpui_apple · macOS and iOS</text>
+	<rect class="nd element" x="582" y="394" width="108" height="52" rx="10" />
+	<text class="ttl" x="596" y="418">Direct3D 11</text>
+	<text class="sub" x="596" y="436">inside the crate</text>
+</svg>
+</Figure>

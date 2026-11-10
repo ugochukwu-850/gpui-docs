@@ -1,0 +1,62 @@
+/* ───────── Diagram system ─────────
+   Inline SVG themed by the site tokens. Encodings repeat in every figure:
+     colour          which concept   teal = state · indigo = view · amber = elements · violet = screen/OS
+     solid / dashed  code you write / work GPUI does
+     accent arrow    the one hop the figure is about
+*/
+.dg-figure { margin: 2rem 0; }
+.dg-frame {
+	background: var(--gpui-card);
+	border: 1px solid var(--gpui-border);
+	border-radius: 1.1rem;
+	padding: 1.6rem 1.4rem 1.2rem;
+	box-shadow: var(--gpui-shadow);
+	overflow-x: auto;
+	--f-state: color-mix(in srgb, var(--c-state) 14%, transparent);
+	--f-view: color-mix(in srgb, var(--c-view) 15%, transparent);
+	--f-element: color-mix(in srgb, var(--c-element) 15%, transparent);
+	--f-platform: color-mix(in srgb, var(--c-platform) 15%, transparent);
+}
+.dg-figure figcaption { margin-top: 0.8rem; font-size: 0.9rem; line-height: 1.6; color: var(--sl-color-gray-3); padding-inline: 0.3rem; }
+.dg-figure figcaption strong { color: var(--sl-color-gray-1); font-weight: 600; }
+
+.dg { display: block; width: 100%; height: auto; overflow: visible; }
+.dg text { font-family: var(--sl-font); fill: var(--sl-color-gray-2); font-size: 13px; }
+.dg .ttl { fill: var(--sl-color-white); font-weight: 650; font-size: 14.5px; }
+.dg .sub { fill: var(--sl-color-gray-3); font-size: 12.5px; }
+.dg .mono { font-family: var(--sl-font-mono); font-size: 12px; }
+.dg .lbl { fill: var(--sl-color-gray-3); font-size: 12px; paint-order: stroke; stroke: var(--gpui-card); stroke-width: 7px; stroke-linejoin: round; }
+.dg .lbl.acc { fill: var(--sl-color-accent-high); font-weight: 600; }
+.dg .big { fill: var(--sl-color-white); font-size: 17px; font-weight: 650; letter-spacing: -0.015em; }
+.dg .cap { fill: var(--sl-color-gray-4); font-family: var(--sl-font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+.dg .nd { stroke-width: 1.5; fill: color-mix(in srgb, var(--sl-color-gray-6) 80%, transparent); stroke: var(--gpui-border); }
+.dg .nd.state { fill: var(--f-state); stroke: var(--c-state); }
+.dg .nd.view { fill: var(--f-view); stroke: var(--c-view); }
+.dg .nd.element { fill: var(--f-element); stroke: var(--c-element); }
+.dg .nd.platform { fill: var(--f-platform); stroke: var(--c-platform); }
+.dg .nd.dash { stroke-dasharray: 6 4; }
+
+.dg .ed { fill: none; stroke: var(--sl-color-gray-4); stroke-width: 1.6; stroke-linecap: round; marker-end: url(#dg-arr); }
+.dg .ed.acc { stroke: var(--sl-color-accent); stroke-width: 2; marker-end: url(#dg-arr-acc); }
+.dg .ed.dash { stroke-dasharray: 5 4; }
+#dg-arr path, #dg-arr-acc path { fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+#dg-arr path { stroke: var(--sl-color-gray-4); }
+#dg-arr-acc path { stroke: var(--sl-color-accent); }
+
+.dg .bd { fill: var(--gpui-card); stroke-width: 1.5; }
+.dg .bd.state { stroke: var(--c-state); } .dg .bd.view { stroke: var(--c-view); }
+.dg .bd.element { stroke: var(--c-element); } .dg .bd.platform { stroke: var(--c-platform); }
+.dg .bd.neutral { stroke: var(--sl-color-gray-4); }
+.dg .bn { fill: var(--sl-color-white); font-size: 11px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+.dg .sw.state { fill: var(--c-state); } .dg .sw.view { fill: var(--c-view); }
+.dg .sw.element { fill: var(--c-element); } .dg .sw.platform { fill: var(--c-platform); }
+.dg .zone { fill: none; stroke: var(--gpui-border); stroke-dasharray: 2 5; stroke-width: 1.4; }
+
+/* spine + file chips used by pipeline-style figures */
+.dg .spine { stroke: var(--gpui-border); stroke-width: 2; }
+.dg .file { fill: var(--sl-color-gray-3); font-size: 11.5px; }
+.dg .zlabel { fill: var(--sl-color-gray-3); font-family: var(--sl-font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; paint-order: stroke; stroke: var(--gpui-card); stroke-width: 9px; stroke-linejoin: round; }
+.dg .bd.state { fill: var(--f-state); } .dg .bd.view { fill: var(--f-view); }
+.dg .bd.element { fill: var(--f-element); } .dg .bd.platform { fill: var(--f-platform); }
+.dg .bd.neutral { fill: color-mix(in srgb, var(--sl-color-gray-4) 18%, var(--gpui-card)); }

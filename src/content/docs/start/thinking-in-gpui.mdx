@@ -6,6 +6,8 @@ sidebar:
   label: Thinking in GPUI
 ---
 
+import LoopDiagram from '../../../components/diagrams/LoopDiagram.astro';
+
 Every GPUI app, from a counter to a code editor, runs on the same simple loop. Once you see it, the rest of the framework falls into place. This page explains the loop and the handful of words you need to talk about it.
 
 **What you'll learn**
@@ -18,24 +20,7 @@ Every GPUI app, from a counter to a code editor, runs on the same simple loop. O
 
 Here is the whole idea in one picture:
 
-```text
-  1. Your data (fields on a struct)
-        │
-        ▼
-  2. render() describes the UI (a tree of div()s) <────┤
-        │                                              │
-        ▼                                              │
-  3. GPUI draws it on screen                           │
-        │                                              │
-        ▼                                              │
-  4. The user clicks or types                          │
-        │                                              │
-        ▼                                              │
-  5. Your handler changes the data                     │
-        │                                              │
-        ▼                                              │
-  6. cx.notify() tells GPUI "this changed" ────────────┘
-```
+<LoopDiagram />
 
 In words:
 

@@ -6,6 +6,8 @@ sidebar:
   label: The big picture
 ---
 
+import LayersDiagram from '../../../components/diagrams/LayersDiagram.astro';
+
 :::note[Advanced]
 This page is for readers who have finished the beginner path and want a mental map of the whole framework. Read [Thinking in GPUI](/start/thinking-in-gpui/) and [State and views](/guides/state-and-views/) first. The rest of the Deep Dive section zooms into the parts drawn here.
 :::
@@ -40,15 +42,7 @@ The contexts each layer receives:
 
 A **view** is not a separate kind of thing. It is an entity whose type implements the `Render` trait. If you only need to hold data that several parts of the app talk about, you use an entity and never render it. People call that a *model*. If you want pixels, you make the entity renderable.
 
-```text
-  your data            how it looks              what gets drawn
- +-----------+       +----------------+       +-------------------+
- | Entity<T> | ----> | Render::render | ----> | div() / img() /   |
- | (state)   |       | (a view)       |       | text (elements)   |
- +-----------+       +----------------+       +-------------------+
-   kept                 kept, but it             rebuilt and
-                        re-describes the UI      dropped each frame
-```
+<LayersDiagram />
 
 ## A complete app
 

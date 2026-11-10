@@ -6,6 +6,8 @@ sidebar:
   label: Start here
 ---
 
+import CrateLayers from '../../../components/diagrams/CrateLayers.astro';
+
 This tour teaches you to read the GPUI source code, so you can answer "how does that actually work?" yourself. This page gives you the map, a reading route, and the commands to download the code.
 
 All facts in the tour were read from commit `b5cd310b` of the Zed repository. Paths are relative to the repository root.
@@ -41,29 +43,7 @@ GPUI lives inside the Zed monorepo at `github.com/zed-industries/zed`. The most 
 
 `gpui` defines the framework plus a set of *traits* (Rust's version of interfaces) such as `Platform` and `PlatformWindow`, in `crates/gpui/src/platform.rs`. Each operating system is implemented by a separate *backend crate*. A thin crate called `gpui_platform` picks the right backend when your program is compiled.
 
-```text
-+------------------------------------------------------------------+
-|  Your app  (or Zed itself)                                       |
-+---------------------------------+--------------------------------+
-|  gpui   THE FRAMEWORK           |  ui   Zed's component library  |
-|  state (entities), views,       |  (Button, Label, ...) built    |
-|  elements, layout, input, text, |  ON gpui; not part of GPUI     |
-|  drawing, async executors       |  itself                        |
-|                                 |                                |
-|  helpers: gpui_macros, gpui_util, gpui_shared_string,            |
-|           gpui_tokio (optional)                                  |
-+---------------------------------+--------------------------------+
-|        The boundary: traits only (Platform, PlatformWindow, ...) |
-+------------------------------------------------------------------+
-|  gpui_platform   chooses ONE backend at compile time             |
-+----------+-----------+-----------+-----------+-------------------+
-| gpui_    | gpui_     | gpui_     | gpui_web  | gpui_ios          |
-| linux    | macos     | windows   | (browser) | (iPhone, iPad)    |
-+----------+-----------+-----------+-----------+-------------------+
-   draws with:                         draws with:
-   gpui_wgpu (Linux and web)           Metal (gpui_apple: macOS, iOS)
-                                       Direct3D 11 (inside gpui_windows)
-```
+<CrateLayers />
 
 Read the diagram from the top: your app uses `gpui`, and `gpui` talks to the operating system only through the traits. The backend crates fill in those traits.
 
