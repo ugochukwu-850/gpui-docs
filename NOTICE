@@ -1,0 +1,9 @@
+GPUI Docs
+An unofficial documentation site for GPUI.
+
+This project is not affiliated with, endorsed by, or sponsored by Zed Industries, Inc.
+"Zed" and "GPUI" are names used by their respective owners.
+
+Code samples and explanations are derived from the GPUI source code and examples
+(https://github.com/zed-industries/zed, crates/gpui), which are
+Copyright Zed Industries, Inc. and licensed under the Apache License, Version 2.0.

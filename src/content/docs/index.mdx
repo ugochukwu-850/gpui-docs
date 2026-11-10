@@ -1,0 +1,146 @@
+---
+title: GPUI
+description: Learn GPUI, the GPU-accelerated Rust UI framework behind the Zed editor.
+template: splash
+pagefind: false
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Icon } from '@astrojs/starlight/components';
+
+<div class="landing">
+
+<section class="gpui-hero">
+<svg class="mark" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+  <defs><linearGradient id="hg" x1="6" y1="6" x2="58" y2="58" gradientUnits="userSpaceOnUse"><stop stop-color="#8b9bff"/><stop offset="1" stop-color="#34d3c1"/></linearGradient></defs>
+  <rect x="6" y="6" width="16" height="16" rx="5" fill="url(#hg)" opacity=".35"/><rect x="24" y="6" width="16" height="16" rx="5" fill="url(#hg)" opacity=".6"/><rect x="42" y="6" width="16" height="16" rx="5" fill="url(#hg)" opacity=".35"/>
+  <rect x="6" y="24" width="16" height="16" rx="5" fill="url(#hg)" opacity=".6"/><rect x="24" y="24" width="16" height="16" rx="5" fill="url(#hg)"/><rect x="42" y="24" width="16" height="16" rx="5" fill="url(#hg)" opacity=".6"/>
+  <rect x="6" y="42" width="16" height="16" rx="5" fill="url(#hg)" opacity=".35"/><rect x="24" y="42" width="16" height="16" rx="5" fill="url(#hg)" opacity=".6"/><rect x="42" y="42" width="16" height="16" rx="5" fill="url(#hg)" opacity=".35"/>
+</svg>
+
+# Build fast desktop apps <span class="grad">in pure Rust</span>
+
+<p class="tagline">GPUI is the GPU-accelerated UI framework that powers the Zed editor. These docs teach it from zero, in plain English.</p>
+
+<div class="hero-actions">
+  <a class="btn primary" href="/start/introduction/">Get started →</a>
+  <a class="btn" href="/tutorials/counter/">Build a counter</a>
+  <a class="btn" href="/deep-dive/big-picture/">How it works</a>
+</div>
+<p class="hero-note">Unofficial docs, written from the GPUI source code. GPUI is pre-1.0, so details change.</p>
+</section>
+
+<div class="panel narrow">
+<div class="panel-head"><span class="ico">⌘</span> Your first window</div>
+
+<Tabs>
+<TabItem label="src/main.rs">
+
+```rust
+use gpui::{
+    div, prelude::*, px, rgb, size, App, Bounds, Context, SharedString,
+    Window, WindowBounds, WindowOptions,
+};
+use gpui_platform::application;
+
+struct HelloWorld {
+    text: SharedString,
+}
+
+impl Render for HelloWorld {
+    fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
+        div()
+            .flex()
+            .flex_col()
+            .gap_3()
+            .bg(rgb(0x505050))
+            .size(px(500.0))
+            .justify_center()
+            .items_center()
+            .text_xl()
+            .text_color(rgb(0xffffff))
+            .child(format!("Hello, {}!", self.text))
+    }
+}
+
+fn main() {
+    application().run(|cx: &mut App| {
+        let bounds = Bounds::centered(None, size(px(500.), px(500.)), cx);
+        cx.open_window(
+            WindowOptions {
+                window_bounds: Some(WindowBounds::Windowed(bounds)),
+                ..Default::default()
+            },
+            |_, cx| cx.new(|_| HelloWorld { text: "World".into() }),
+        )
+        .unwrap();
+        cx.activate(true);
+    });
+}
+```
+
+</TabItem>
+<TabItem label="Cargo.toml">
+
+```toml
+[package]
+name = "hello-gpui"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+gpui = { git = "https://github.com/zed-industries/zed", rev = "b5cd310b3b54dfc659fcc06453e6358843dfe216" }
+gpui_platform = { git = "https://github.com/zed-industries/zed", rev = "b5cd310b3b54dfc659fcc06453e6358843dfe216", features = ["wayland", "x11"] }
+```
+
+</TabItem>
+</Tabs>
+
+<p class="hero-note" style="text-align:left">New here? The <a href="/start/hello-world/">Hello World walkthrough</a> explains every line.</p>
+</div>
+
+<h2 class="section-title">Why GPUI?</h2>
+<p class="section-sub">Most desktop UI toolkits make you choose between speed and a pleasant way to write code. GPUI aims for both.</p>
+
+<div class="feature-grid">
+  <div class="feature"><div class="ico">⚡</div><h3>Drawn on the GPU</h3><p>There is no browser or web view inside. GPUI draws every frame itself on your graphics card, which is how Zed stays smooth with huge files.</p></div>
+  <div class="feature"><div class="ico">🦀</div><h3>Just Rust</h3><p>Your state, your layout and your event handlers live in one language. No HTML, no JavaScript, no bridge between them.</p></div>
+  <div class="feature"><div class="ico">🎨</div><h3>Styling you already know</h3><p>Style with chained methods like <code>.flex()</code>, <code>.gap_3()</code> and <code>.bg(...)</code>. If you have used Tailwind, it will feel familiar.</p></div>
+  <div class="feature"><div class="ico">🧩</div><h3>Three levels of control</h3><p>Use simple views for most screens, and drop down to low-level elements when you need a custom editor or a huge list.</p></div>
+  <div class="feature"><div class="ico">⌨️</div><h3>Keyboard first</h3><p>Actions and key bindings are built in, so shortcuts, focus and command palettes are natural to build.</p></div>
+  <div class="feature"><div class="ico">🖥️</div><h3>macOS, Windows, Linux</h3><p>One codebase. Each platform has its own native window backend underneath.</p></div>
+</div>
+
+<h2 class="section-title">Coming from React?</h2>
+<p class="section-sub">You already know most of the ideas. Here is how they map across.</p>
+
+<table>
+<thead><tr><th>React</th><th>GPUI</th></tr></thead>
+<tbody>
+<tr><td>A component function</td><td>A struct that implements <code>Render</code></td></tr>
+<tr><td>JSX</td><td><code>div().child(...)</code></td></tr>
+<tr><td><code>className="flex gap-3"</code></td><td><code>.flex().gap_3()</code></td></tr>
+<tr><td><code>useState</code></td><td>Fields on your struct</td></tr>
+<tr><td><code>setState(...)</code> re-renders</td><td><code>cx.notify()</code> re-renders</td></tr>
+<tr><td><code>onClick={'{...}'}</code></td><td><code>.on_click(cx.listener(...))</code></td></tr>
+</tbody>
+</table>
+
+<h2 class="section-title">Learn it in three steps</h2>
+<p class="section-sub">Follow the path in order. Each page builds on the last, and each example is ready to paste and run.</p>
+
+<div class="steps">
+  <a class="step" href="/start/introduction/"><h3>Start here</h3><p>What GPUI is, how to install it, and your first window on screen.</p></a>
+  <a class="step" href="/tutorials/counter/"><h3>Build something</h3><p>A counter, a todo list and a text input. You learn state, events and lists by doing.</p></a>
+  <a class="step" href="/guides/styling/"><h3>Go deeper</h3><p>Task-based guides for styling, layout, keyboard shortcuts, async work and more.</p></a>
+</div>
+
+<h2 class="section-title">Want to read the source?</h2>
+<p class="section-sub">GPUI has little official documentation, so the best teacher is its code. The Codebase Tour maps the whole repo and shows how a frame gets from your code to pixels.</p>
+
+<div class="hero-actions" style="margin-top:0">
+  <a class="btn" href="/codebase/overview/">Codebase tour</a>
+  <a class="btn" href="/reference/examples-index/">Examples index</a>
+</div>
+
+</div>

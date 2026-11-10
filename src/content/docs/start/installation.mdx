@@ -1,0 +1,232 @@
+---
+title: Installation
+description: Set up Rust, your system libraries and a new Cargo project so a GPUI app compiles.
+sidebar:
+  order: 3
+---
+
+import { Tabs, TabItem, Steps } from '@astrojs/starlight/components';
+
+This page takes you from a clean machine to a Rust project that depends on GPUI and builds. It takes about ten minutes, plus a long first compile.
+
+**What you'll do**
+
+- Install Rust and the system libraries GPUI needs on your OS.
+- Create a Cargo project.
+- Add GPUI as a dependency, pinned to a known-good version.
+- Check that it builds.
+
+## Before you begin
+
+You need a computer running macOS, Windows or Linux, a terminal, and `git` (Cargo uses it to download GPUI). You also need a working graphics driver. On Linux that means Vulkan or OpenGL.
+
+A GPUI app uses two crates:
+
+- `gpui` is the framework itself: elements, state, windows, text and input.
+- `gpui_platform` picks the right windowing, rendering and text backend for your OS. It provides `gpui_platform::application()`, which you will call in `main`.
+
+## Install Rust
+
+GPUI's README asks for "the latest version of stable Rust", and the code on this site uses Rust edition 2024. Install Rust with [rustup](https://rustup.rs/), the official installer, or update it if you already have it:
+
+<Tabs syncKey="os">
+  <TabItem label="macOS">
+
+```sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+  </TabItem>
+  <TabItem label="Windows">
+
+Download and run `rustup-init.exe` from [rustup.rs](https://rustup.rs/). When it asks, accept the default MSVC toolchain. It will point you to the Visual Studio C++ build tools if you do not have them yet.
+
+  </TabItem>
+  <TabItem label="Linux">
+
+```sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+  </TabItem>
+</Tabs>
+
+If Rust is already installed, bring it up to date:
+
+```sh
+rustup update stable
+```
+
+For reference, the Zed workspace at the commit these docs use pins Rust `1.98.1`. Any current stable toolchain is a good choice.
+
+## Install system libraries
+
+GPUI talks to your operating system's windowing and graphics systems, so a few native pieces must be present.
+
+<Tabs syncKey="os">
+  <TabItem label="macOS">
+
+GPUI draws with Metal, which needs the Xcode toolchain.
+
+<Steps>
+
+1. Install [Xcode](https://apps.apple.com/us/app/xcode/id497799835?mt=12) from the App Store or the [Apple Developer](https://developer.apple.com/download/all/) site. Open it once so it installs the macOS components.
+
+2. Install the command line tools:
+
+   ```sh
+   xcode-select --install
+   ```
+
+3. Make sure the command line tools point at the full Xcode install:
+
+   ```sh
+   sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+   ```
+
+</Steps>
+
+  </TabItem>
+  <TabItem label="Windows">
+
+The GPUI README lists no extra requirements. You need a Rust toolchain that can link Windows programs, which in practice means the MSVC toolchain and its build tools (the rustup installer guides you). Windows draws through DirectX, so a normal graphics driver is enough.
+
+  </TabItem>
+  <TabItem label="Linux">
+
+The README does not list Linux packages, so this list comes from testing. On Ubuntu 24.04, a hello-world app built once these development packages were installed:
+
+```sh
+sudo apt install libxkbcommon-dev libxkbcommon-x11-dev libwayland-dev \
+  libxcb1-dev libx11-xcb-dev libvulkan-dev libfontconfig-dev
+```
+
+You also need a C compiler and `pkg-config`, which most development machines already have. On Ubuntu they come from `build-essential` and `pkg-config`.
+
+:::note[Ubuntu 24.04: the `libxkbcommon-x11-dev` package]
+Without `libxkbcommon-x11-dev`, the final link step fails with `unable to find library -lxkbcommon-x11`. It is included in the command above. Other distributions use different package names (for example `libxkbcommon-x11-devel` on Fedora). That name is not tested here.
+:::
+
+What the libraries are for: Vulkan or OpenGL for drawing, Wayland and X11 for windows, `xkbcommon` for keyboard handling, and fontconfig for fonts. If you use another distribution and the build fails, read the error. The failing `-sys` crate names the missing library through `pkg-config`, and you can install the matching development package.
+
+  </TabItem>
+</Tabs>
+
+## Create the project
+
+Make a new binary project and open it:
+
+```sh
+cargo new my-gpui-app
+cd my-gpui-app
+```
+
+Open `Cargo.toml`. Make sure the `[package]` section says `edition = "2024"`:
+
+```toml title="Cargo.toml"
+[package]
+name = "my-gpui-app"
+version = "0.1.0"
+edition = "2024"
+```
+
+New projects created by a recent Cargo already use this edition. If yours says `2021`, change it.
+
+## Add GPUI
+
+Add both crates under `[dependencies]`. Use the same `rev` for both, and choose the `features` line that matches your OS:
+
+<Tabs syncKey="os">
+  <TabItem label="macOS">
+
+```toml title="Cargo.toml"
+[dependencies]
+gpui = { git = "https://github.com/zed-industries/zed", rev = "b5cd310b3b54dfc659fcc06453e6358843dfe216" }
+gpui_platform = { git = "https://github.com/zed-industries/zed", rev = "b5cd310b3b54dfc659fcc06453e6358843dfe216", features = ["font-kit"] }
+```
+
+Rendering uses Metal and is always available. Without `font-kit`, GPUI falls back to a placeholder text system that lays text out but draws no letters.
+
+  </TabItem>
+  <TabItem label="Windows">
+
+```toml title="Cargo.toml"
+[dependencies]
+gpui = { git = "https://github.com/zed-industries/zed", rev = "b5cd310b3b54dfc659fcc06453e6358843dfe216" }
+gpui_platform = { git = "https://github.com/zed-industries/zed", rev = "b5cd310b3b54dfc659fcc06453e6358843dfe216" }
+```
+
+Windows needs no extra features: windows use Win32 and text uses DirectWrite. The `font-kit` feature has no effect here.
+
+  </TabItem>
+  <TabItem label="Linux">
+
+```toml title="Cargo.toml"
+[dependencies]
+gpui = { git = "https://github.com/zed-industries/zed", rev = "b5cd310b3b54dfc659fcc06453e6358843dfe216" }
+gpui_platform = { git = "https://github.com/zed-industries/zed", rev = "b5cd310b3b54dfc659fcc06453e6358843dfe216", features = ["wayland", "x11"] }
+```
+
+Enable at least one of `wayland` and `x11` so GPUI can open a desktop window. These features also bring in the renderer and text system, so you do not need a separate text feature.
+
+  </TabItem>
+</Tabs>
+
+:::note[Why a git dependency?]
+`gpui` is published on crates.io, but `gpui_platform` and the crates it relies on are not (the Zed workspace marks them `publish = false`). That means the README's `version = "*"` lines cannot resolve for the code at this commit.
+
+So take both crates from the same Zed git revision. Mixing a crates.io `gpui` with a git `gpui_platform` would put two different `gpui` crates in your build, and their types would not match. Pinning a `rev` also means Zed's daily changes cannot break your project by surprise.
+:::
+
+If you only target one OS, you can use only that OS's line. If you want one project to build everywhere, use `features = ["font-kit", "wayland", "x11"]` for `gpui_platform`, which is the README's cross-platform default. The `gpui` crate has its own default features (`font-kit`, `wayland`, `x11`, `windows-manifest`), and they are fine for an application.
+
+Cargo finds each crate by name inside the Zed repository, so you do not need a `path`.
+
+## Check it builds
+
+Replace `src/main.rs` with the program from [Hello World](/start/hello-world/), then run:
+
+```sh
+cargo run
+```
+
+The first build downloads the Zed repository and compiles a large dependency tree. Expect it to take a while. Later builds are quick.
+
+You should see a 500 by 500 window with a gray background and the text "Hello, World!". If you see that, you are ready for the next page.
+
+## Troubleshooting
+
+**`unable to find library -lxkbcommon-x11` (Linux).** Install the development package for it. On Ubuntu that is `sudo apt install libxkbcommon-x11-dev`.
+
+**Another `-sys` crate fails to build (Linux).** The error names a library through `pkg-config`. Install your distribution's development package for that library.
+
+**The window opens but there is no text (macOS).** Add `features = ["font-kit"]` to `gpui_platform`. Without it GPUI uses a text system that draws no letters.
+
+**No window appears on Linux, or the build complains about a platform.** Make sure `gpui_platform` has the `wayland` feature, the `x11` feature, or both.
+
+**Type errors that mention two different `gpui` crates.** One of your dependencies comes from a different source or `rev`. Take both `gpui` and `gpui_platform` from the same git revision.
+
+**Dependency resolution or compilation fails inside crates such as `async-task` or `calloop`.** Cargo ignores `[patch]` sections of dependencies, and the Zed workspace has a `[patch.crates-io]` block that includes forks of those crates. It is not verified whether a standalone app builds without it. If you hit this, copy the relevant entries from the Zed workspace `Cargo.toml` at the same `rev` into your own `[patch.crates-io]`.
+
+**The window opens behind other windows.** The Hello World program calls `cx.activate(true)` to bring itself to the front. Make sure your program does too.
+
+**The app keeps running after you close the window (macOS).** That is the default on macOS. Quit it with Ctrl-C in the terminal.
+
+## Next steps
+
+- [Hello World](/start/hello-world/): open your first window and read the code line by line.
+- [Thinking in GPUI](/start/thinking-in-gpui/): the mental model behind everything else.
+- [Cargo features](/reference/cargo-features/): the full list of features if you want to trim your build.
+
+<details>
+<summary>Where this lives in the source</summary>
+
+- `crates/gpui/README.md`
+- `crates/gpui/Cargo.toml`
+- `crates/gpui_platform/Cargo.toml`
+- `crates/gpui_platform/src/gpui_platform.rs`
+- `crates/gpui_linux/Cargo.toml`
+- `crates/gpui_wgpu/Cargo.toml`
+- `Cargo.toml` (workspace `publish`, `[patch.crates-io]`)
+- `rust-toolchain.toml`
+</details>
